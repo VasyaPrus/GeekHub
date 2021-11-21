@@ -1,4 +1,4 @@
-#Write a script to remove duplicates from Dictionary.
+#11.Write a script to remove duplicates from Dictionary.
 
 dict1 = {
     1 : "one",

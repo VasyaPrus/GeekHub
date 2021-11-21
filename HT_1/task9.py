@@ -1,4 +1,4 @@
-#Write a script to remove an empty tuple(s) from a list of tuples.
+#9.Write a script to remove an empty tuple(s) from a list of tuples.
 
 sample_list = [(), (), ('',), ('a', 'b'), {}, ('a', 'b', 'c'), ('d'), '', []]
 l = []

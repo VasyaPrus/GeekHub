@@ -1,4 +1,4 @@
-#Write a script to check whether a specified value is contained in a group of values.
+#6.Write a script to check whether a specified value is contained in a group of values.
 
 N = int(input("Number of values in the list:"))
 l = []

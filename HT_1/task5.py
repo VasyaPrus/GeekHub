@@ -1,4 +1,4 @@
-#Write a script to convert decimal to hexadecimal
+#5.Write a script to convert decimal to hexadecimal
 
 num = int(input('Enter a decimal number: '))
 num = hex(num)

@@ -1,4 +1,4 @@
-#Write a script to sum of the first n positive integers.
+#3.Write a script to sum of the first n positive integers.
 
 n = int(input('Enter n:'))
 i = 0

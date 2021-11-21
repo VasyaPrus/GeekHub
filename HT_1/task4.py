@@ -1,4 +1,4 @@
-#Write a script to concatenate N strings.
+#4.Write a script to concatenate N strings.
 
 N = int(input("Enter N :"))
 l = []
