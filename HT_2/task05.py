@@ -9,4 +9,14 @@ dict_1 = {
     'f' : 5
 }
 
-print(list(set(dict_1.values())))
+d = {}
+
+for val in dict_1:
+    if dict_1[val] not in d.values():
+        d.update({val:dict_1[val]})
+
+print(d)
+
+
+
+
