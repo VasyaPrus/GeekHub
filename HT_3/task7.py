@@ -7,9 +7,12 @@ def calculator(num_1, num_2, operation):
         print(num_1 - num_2)
     elif operation == "*":
         print(num_1 * num_2)
-    elif operation == "/":
-        print(num_1 / num_2)    
+    elif operation == '/':
+        if num_2 != 0:
+            print(num_1 / num_2)
+        else:
+            print("Ділення на 0!")    
     else:
-        print("Невірно введяна операція")
+        print("Невірно введена операція")
 
-calculator(15, 3, "+")
+calculator(5, 0, "/")

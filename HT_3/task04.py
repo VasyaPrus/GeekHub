@@ -12,10 +12,9 @@ def square_numbers(num_1):
     return num_1 ** 2
 
 def general_function(num_1, num_2):
-    print(sum_numbers(5, 6))
-    print(multiply_numbers(5, 6))
-    print(square_numbers(5))
+    print(sum_numbers(num_1, num_2))
+    print(multiply_numbers(num_1, num_2))
+    print(square_numbers(num_1))
     return num_2 - num_1
     
-
-print(general_function(5, 8))
+print(general_function(8, 12))
