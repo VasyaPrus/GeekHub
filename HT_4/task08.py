@@ -4,7 +4,7 @@
 
 def shift(lst, shift):
     if shift < 0:
-        steps = abs(shift)
+        shift = abs(shift)
         for i in range(shift):
             lst.append(lst.pop(0))
     else:
