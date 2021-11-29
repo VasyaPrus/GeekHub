@@ -2,13 +2,10 @@
 
 
 def is_prime(N):
-    for i in range(2, N+1):
-        flag = True
-        for j in range(2, i):
-            if i % j == 0:
-                flag = False
-        if flag:
-            print(i)
-
-
-is_prime(50)
+    for i in range(2, int(N / 2) + 1):
+        if N % i == 0: 
+            return False
+        return True
+            
+            
+print(is_prime(47))
