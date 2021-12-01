@@ -9,7 +9,7 @@ def check_log_pass(username, password):
     elif len(password) < 8:
         raise Exception ("Пароль повинен містити більше 8-ми символів")
     for letter in password:
-        if letter in '0123456789':
+        if letter.isdigit():
             break
     else:
         raise Exception('пароль повинен мати хоча б одну цифру')
