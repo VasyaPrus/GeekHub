@@ -3,23 +3,25 @@
 
 def my_range(start, stop, step = 1):
     i = start
-    if step < 0 or step == 0:
-        raise "Крок не повинен бути відємним числом і не дорівнювати нулю"
-    if i > stop:
-        while i > stop:
+    if step > 0:
+        while i < stop:
             yield i
-            i -= step
-    
-    while i < stop:
-        yield i
-        i += step
-    
-try:
-    for k in my_range(20, -8, 1):
-        print(k)
-except RuntimeError as ex:
-    print(ex)
-except:
-    print("Сталася помилка")
+            i += step
+    elif step < 0 and i > stop:
+        while i > stop:
+           yield i
+           i += step
+    else:
+        raise Exception
+
+#print(list(my_range(10)))
+print(list(my_range(1, 11)))
+print(list(my_range(0, 30, 5)))
+print(list(my_range(0, 10, 3)))
+print(list(my_range(0, -10, -1)))
+#print(list(my_range(0)))
+print(list(my_range(1, 0)))
+
+
 
 
