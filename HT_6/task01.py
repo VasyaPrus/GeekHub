@@ -18,7 +18,7 @@ def traffic_lights():
         for x in range(2):
             print(light_cars[1], light_cars[0])
             time.sleep(1)
-        continue
+        
 
 
 traffic_lights()
