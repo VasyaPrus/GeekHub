@@ -26,11 +26,7 @@ def start():
     def append_json(user, transaktion, sum):
         with open(f"{login}_transactions.json", 'w') as outfile:
             data['transactions'].append({
-                'user' :f"{user}",
-
-                f'{transaktion}': f"{sum}"
-            })
-            json.dump(data, outfile)
+                'user' :f"{user}"
 
     def cash_withdrawal(login):
         with open(f"{login}_balance.json") as f1:
@@ -81,13 +77,14 @@ def start():
     try:
         if passw == users[user]:
             login = user
+            print(login)
             while True:
                 print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Вихід')
                 n = int(input(''))
                 if n == 1:
                     see_balance(login)
                 elif n == 2:
-                    replenish_the_balance()
+                    replenish_the_balance(login)
                 elif n == 3:
                     cash_withdrawal(login)
                 elif n == 4:
