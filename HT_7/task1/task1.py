@@ -32,22 +32,23 @@ def start():
             })
             json.dump(data, outfile)
 
-
     def cash_withdrawal(login):
         with open("username_balance.json") as f1:
             templates = json.load(f1)
             append_balance = int(input('Сумма видачі готівки:'))
-            for val in templates:
-                if val == login:
-                    templates[val] -= append_balance 
-                    if templates[val] <= - 500:
-                        print('максимальна сумма займу 500')
-                        return enter_the_item(login)
-                    with open("username_balance.json", "wt", encoding="utf-8") as f1:
-                        append_json(login,' cash_withdrawal', append_balance) 
-                        json.dump(templates, f1, indent=2)
-                        print(templates[val])
-                    enter_the_item(login)
+            if append_balance >= 0:
+                for val in templates:
+                    if val == login:
+                        templates[val] -= append_balance 
+                        if templates[val] <= - 501:
+                            return print('максимальна сумма займу 500')
+                        
+                        with open("username_balance.json", "wt", encoding="utf-8") as f1:
+                            append_json(login,' cash_withdrawal', append_balance) 
+                            json.dump(templates, f1, indent=2)
+                            print(templates[val])
+                        
+            else: print("Введена не коректна сумма")
 
     def see_balance(login):
         with open("username_balance.json") as f1:
@@ -56,35 +57,21 @@ def start():
                 if val == login:
                     balance = templates[val]
                     print(balance)
-                    enter_the_item(login)
 
     def replenish_the_balance():
         with open("username_balance.json") as f1:
             templates = json.load(f1)
             append_balance = int(input('Введіть значення поповнення:'))
-            for val in templates:
-                if val == login:
-                    templates[val] += append_balance
-                    with open("username_balance.json", "wt", encoding="utf-8") as f1:
-                        append_json(login,'replenish', append_balance) 
-                        json.dump(templates, f1, indent=2)
-                        print(templates[val])
-                    enter_the_item(login)
-
-    def enter_the_item(login):
-        print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Вихід')
-        n = int(input(''))
-        if n == 1:
-            see_balance(login)
-        elif n == 2:
-            replenish_the_balance()
-        elif n == 3:
-            cash_withdrawal(login)
-        elif n == 4:
-            print('Дякую що залишаєтеся з нами)')
-
-
-       
+            if append_balance >= 0:
+                for val in templates:
+                    if val == login:
+                        templates[val] += append_balance
+                        with open("username_balance.json", "wt", encoding="utf-8") as f1:
+                            append_json(login,'replenish', append_balance) 
+                            json.dump(templates, f1, indent=2)
+                            print(templates[val])
+            else: print('Введена не коректна сумма')
+  
     with open("name.data") as f3:
         pairs = (line.split(",") for line in f3)
         users = {name:password.strip() for name, password in pairs}
@@ -94,7 +81,18 @@ def start():
     try:
         if passw == users[user]:
             login = user
-            enter_the_item(login)
+            while True:
+                print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Вихід')
+                n = int(input(''))
+                if n == 1:
+                    see_balance(login)
+                elif n == 2:
+                    replenish_the_balance()
+                elif n == 3:
+                    cash_withdrawal(login)
+                elif n == 4:
+                    print('Дякую що залишаєтеся з нами)')
+                    break
         else:
             print("Неправильний пароль")
     except KeyError:
