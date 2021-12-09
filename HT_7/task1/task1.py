@@ -24,53 +24,151 @@ data['transactions'] = []
 
 def start():
     def append_json(user, transaktion, sum):
-        with open('username_transactions.json', 'w') as outfile:
-            data['transactions'].append({
-                'user' :f"{user}",
+        username1 = "Vasya_transactions.json"
+        username2 = "Vova_transactions.json"
+        username3 = "Vlad_transactions.json"
 
-                f'{transaktion}': f"{sum}"
-            })
-            json.dump(data, outfile)
+        if login == "Vasya":
+            with open(username1, 'w') as outfile:
+                data['transactions'].append({
+                    'user' :f"{user}",
+
+                    f'{transaktion}': f"{sum}"
+                })
+                json.dump(data, outfile)
+        elif login == "Vova":
+            with open(username2, 'w') as outfile:
+                data['transactions'].append({
+                    'user' :f"{user}",
+
+                    f'{transaktion}': f"{sum}"
+                })
+                json.dump(data, outfile)
+        elif login == "Vlad":
+            with open(username3, 'w') as outfile:
+                data['transactions'].append({
+                    'user' :f"{user}",
+
+                    f'{transaktion}': f"{sum}"
+                })
+                json.dump(data, outfile)
 
     def cash_withdrawal(login):
-        with open("username_balance.json") as f1:
-            templates = json.load(f1)
-            append_balance = int(input('Сумма видачі готівки:'))
-            if append_balance >= 0:
-                for val in templates:
-                    if val == login:
-                        templates[val] -= append_balance 
-                        if templates[val] <= - 501:
-                            return print('максимальна сумма займу 500')
-                        
-                        with open("username_balance.json", "wt", encoding="utf-8") as f1:
-                            append_json(login,' cash_withdrawal', append_balance) 
-                            json.dump(templates, f1, indent=2)
-                            print(templates[val])
-                        
-            else: print("Введена не коректна сумма")
+        username1 = "Vasya_balance.json"
+        username2 = "Vova_balance.json"
+        username3 = "Vlad_balance.json"
+
+        if login == "Vasya":
+            with open(username1) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Сумма видачі готівки:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] -= append_balance 
+                            if templates[val] <= - 501:
+                                return print('максимальна сумма займу 500')
+                            
+                            with open(username1, "wt", encoding="utf-8") as f1:
+                                append_json(login,' cash_withdrawal', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print("Введена не коректна сумма")
+        elif login == "Vova":
+            with open(username2) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Сумма видачі готівки:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] -= append_balance 
+                            if templates[val] <= - 501:
+                                return print('максимальна сумма займу 500')
+                            
+                            with open(username2, "wt", encoding="utf-8") as f1:
+                                append_json(login,' cash_withdrawal', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print("Введена не коректна сумма")
+        elif login == "Vlad":
+            with open(username3) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Сумма видачі готівки:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] -= append_balance 
+                            if templates[val] <= - 501:
+                                return print('максимальна сумма займу 500')
+                            
+                            with open(username3, "wt", encoding="utf-8") as f1:
+                                append_json(login,' cash_withdrawal', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print("Введена не коректна сумма")
 
     def see_balance(login):
-        with open("username_balance.json") as f1:
-            templates = json.load(f1)
-            for val in templates:
-                if val == login:
-                    balance = templates[val]
-                    print(balance)
+        username1 = "Vasya_balance.json"
+        username2 = "Vova_balance.json"
+        username3 = "Vlad_balance.json"
+        
+        if login == "Vasya":
+            with open(username1) as f:
+                templates = json.load(f)
+                print(templates.pop("Vasya"))
+        elif login == "Vova":
+            with open(username2) as f1:
+                templates = json.load(f1)
+                print(templates.pop("Vova"))
+        elif login == "Vlad":
+            with open(username3) as f2:
+                templates = json.load(f2)
+                print(templates.pop("Vlad"))
 
-    def replenish_the_balance():
-        with open("username_balance.json") as f1:
-            templates = json.load(f1)
-            append_balance = int(input('Введіть значення поповнення:'))
-            if append_balance >= 0:
-                for val in templates:
-                    if val == login:
-                        templates[val] += append_balance
-                        with open("username_balance.json", "wt", encoding="utf-8") as f1:
-                            append_json(login,'replenish', append_balance) 
-                            json.dump(templates, f1, indent=2)
-                            print(templates[val])
-            else: print('Введена не коректна сумма')
+    def replenish_the_balance(login):
+        username1 = "Vasya_balance.json"
+        username2 = "Vova_balance.json"
+        username3 = "Vlad_balance.json"
+
+        if login == "Vasya":
+            with open(username1) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Введіть значення поповнення:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] += append_balance
+                            with open(username1, "wt", encoding="utf-8") as f1:
+                                append_json(login,'replenish', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print('Введена не коректна сумма')
+        if login == "Vova":
+            with open(username2) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Введіть значення поповнення:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] += append_balance
+                            with open(username2, "wt", encoding="utf-8") as f1:
+                                append_json(login,'replenish', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print('Введена не коректна сумма')
+        if login == "Vlad":
+            with open(username3) as f1:
+                templates = json.load(f1)
+                append_balance = int(input('Введіть значення поповнення:'))
+                if append_balance >= 0:
+                    for val in templates:
+                        if val == login:
+                            templates[val] += append_balance
+                            with open(username3, "wt", encoding="utf-8") as f1:
+                                append_json(login,'replenish', append_balance) 
+                                json.dump(templates, f1, indent=2)
+                                print(templates[val])
+                else: print('Введена не коректна сумма')
   
     with open("name.data") as f3:
         pairs = (line.split(",") for line in f3)
@@ -81,13 +179,14 @@ def start():
     try:
         if passw == users[user]:
             login = user
+            print(login)
             while True:
                 print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Вихід')
                 n = int(input(''))
                 if n == 1:
                     see_balance(login)
                 elif n == 2:
-                    replenish_the_balance()
+                    replenish_the_balance(login)
                 elif n == 3:
                     cash_withdrawal(login)
                 elif n == 4:
