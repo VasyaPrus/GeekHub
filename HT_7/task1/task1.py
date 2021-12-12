@@ -54,9 +54,8 @@ def start():
         with open(f"{login}_balance.json") as f1:
             templates = json.load(f1)
             for val in templates:
-                if val == login:
-                    balance = templates[val]
-                    print(balance)
+                balance = templates[val]
+            print(balance)
 
     def replenish_the_balance(login):
         with open(f"{login}_balance.json") as f1:
@@ -64,12 +63,11 @@ def start():
             append_balance = int(input('Введіть значення поповнення:'))
             if append_balance >= 0:
                 for val in templates:
-                    if val == login:
-                        templates[val] += append_balance
-                        with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
-                            append_json(login,'replenish', append_balance) 
-                            json.dump(templates, f1, indent=2)
-                            print(templates[val])
+                    templates[val] += append_balance
+                    with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
+                        append_json(login,'replenish', append_balance) 
+                        json.dump(templates, f1, indent=2)
+                        print(templates[val])
             else: print('Введена не коректна сумма')
   
     with open("name.data") as f3:
