@@ -15,7 +15,7 @@ data['transactions'] = []
 
 def start():
     def append_json(user, transaktion, sum):
-        with open(f"{login}_transactions.json", 'w') as outfile:
+        with open(f"{user}_transactions.json", 'w') as outfile:
             data['transactions'].append({
                 'user' :f"{user}",
 
@@ -27,27 +27,49 @@ def start():
         with open("collection.json") as f:
             templates = json.load(f)
             withdrawal_balance = int(input('Введіть значення зняття:'))
+            temp = withdrawal_balance
             full_sum = 0
+            dic = {
+                    "1000": 0,
+                    "500": 0,
+                    "200": 0,
+                    "100": 0,
+                    "50": 0,
+                    "20": 0,
+                    "10": 0
+                    }
             for key in templates:
                 if int(templates[key]) > 0:
                     while withdrawal_balance % int(key) != withdrawal_balance and withdrawal_balance % int(key) >= 0 and templates[key] > 0:
-                        print("Зняли: ",  key)
                         withdrawal_balance -= int(key)
                         full_sum += int(key)
+                        dic[key] += 1
+
                         with open("collection.json", "wt", encoding="utf-8") as f:
                             templates[key]-= 1 
                             json.dump(templates, f, indent=2)
         with open(f"{login}_balance.json") as f1:
             temp2 = json.load(f1)
+            if(full_sum != temp):
+                for key in dic:
+                    while dic[key] != 0:
+                        dic[key] -=1
+                        with open("collection.json", "wt", encoding="utf-8") as f:
+                            templates[key]+= 1 
+                            json.dump(templates, f, indent=2)
+                print("НЕМОЖЛИВО ЗНЯТИ ДАНУ СУМУ ЦІЛКОМ")
+
+                return
+            temp2[login] -= full_sum
+            print("Було знято: ", temp)
+            if temp2[login] <= -501:
+                    return print('максимальна сумма займу не більше 500')
             with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
-                temp2[login] -= full_sum
                 json.dump(temp2, f1, indent=2)
+            append_json(login, "withdrawal", full_sum)
+
                     
             
-
-
-
-
     def replenish_the_balance(login):
         with open(f"{login}_balance.json") as f1:
             templates = json.load(f1)
@@ -71,6 +93,7 @@ def start():
             print(balance)
 
     def collection():
+        
         def check_banknotes():
             for k, v in templates.items(): 
                 print(f'Валюта:{k},Кількість валюти:{v}')
@@ -84,21 +107,19 @@ def start():
                     templates[kay_par] += number
                     with open("collection.json", "wt", encoding="utf-8") as f:
                         json.dump(templates, f, indent=2)
-
+            collection()
         with open("collection.json") as f:
             templates = json.load(f)
-            print('1. Переглянути наявні купюри\n2. Змінити кількість купюр\n3. Повернутися назад')
+            print('1. Переглянути наявні купюри\n2. Змінити кількість купюр\n3. Вийти')
             n = int(input(''))
             if n == 1:
                 check_banknotes()
             elif n == 2:
                 change_number_banknotes()
-            
+            elif n == 3:
+                raise SystemExit 
                 
-            
-            
-                            
-
+                
     with open("name.data") as f3:
         pairs = (line.split(",") for line in f3)
         users = {name:password.strip() for name, password in pairs}
@@ -106,11 +127,12 @@ def start():
     passw = input("Введіть пароль: ")
 
     try:
+        if user == "Anya" and passw == "1111":
+            collection()
         if passw == users[user]:
             login = user
-            
             while True:
-                print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Інкасація\n5. Вихід')
+                print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n5. Вихід')
                 n = int(input(''))
                 if n == 1:
                     see_balance(login)
@@ -118,11 +140,11 @@ def start():
                     replenish_the_balance(login)
                 elif n == 3:
                     cash_withdrawal(login)
-                elif n == 4:
-                    collection()
                 elif n == 5:
                     print('Дякую що залишаєтеся з нами)')
                     break
+        
+            
         else:
             print("Неправильний пароль")
     except KeyError:
