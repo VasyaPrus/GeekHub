@@ -76,7 +76,6 @@ def start():
         with open(f"{login}_balance.json") as f1:
             temp2 = json.load(f1)
             if full_sum != temp:
-                print(temp2[login])
                 restore_collection(dic, templates, withdrawal_balance, "collection.json")
                 print("НЕМОЖЛИВО ЗНЯТИ ДАНУ СУМУ ЦІЛКОМ")
 

@@ -1,1 +1,1 @@
-{"transactions": [{"user": "Vova", "replenish": "1000"}, {"user": "Vova", " cash_withdrawal": "1500"}]}
+{"transactions": [{"user": "Vova", "withdrawal": "100"}, {"user": "Vova", "withdrawal": "100"}]}
