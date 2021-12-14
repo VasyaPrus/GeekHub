@@ -13,6 +13,14 @@ import json
 data ={}
 data['transactions'] = []
 
+def check(sum):
+    with open("collection.json") as f:
+            templates = json.load(f)
+            for key in templates:
+                if templates[key] > 0  and sum % int(key) == 0:
+                    return True
+            return False   
+
 def start():
     def append_json(user, transaktion, sum):
         with open(f"{user}_transactions.json", 'w') as outfile:
@@ -39,8 +47,9 @@ def start():
                     "10": 0
                     }
             for key in templates:
-                if int(templates[key]) > 0:
-                    while withdrawal_balance % int(key) != withdrawal_balance and withdrawal_balance % int(key) >= 0 and templates[key] > 0:
+                if int(templates[key]) > 0 and check(withdrawal_balance - int(key)):
+                    while withdrawal_balance % int(key) != withdrawal_balance  and templates[key] > 0:
+                        print("Зняли: ",  key)
                         withdrawal_balance -= int(key)
                         full_sum += int(key)
                         dic[key] += 1
@@ -52,7 +61,7 @@ def start():
             temp2 = json.load(f1)
             if(full_sum != temp):
                 for key in dic:
-                    while dic[key] != 0:
+                    while dic[key] != 0 and  withdrawal_balance % int(key) !=0:
                         dic[key] -=1
                         with open("collection.json", "wt", encoding="utf-8") as f:
                             templates[key]+= 1 
@@ -132,7 +141,7 @@ def start():
         if passw == users[user]:
             login = user
             while True:
-                print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n5. Вихід')
+                print('1. Продивитись баланс\n2. Поповнити баланс\n3. Видача готівки\n4. Вихід')
                 n = int(input(''))
                 if n == 1:
                     see_balance(login)
@@ -140,7 +149,7 @@ def start():
                     replenish_the_balance(login)
                 elif n == 3:
                     cash_withdrawal(login)
-                elif n == 5:
+                elif n == 4:
                     print('Дякую що залишаєтеся з нами)')
                     break
         
