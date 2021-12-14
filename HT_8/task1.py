@@ -1,4 +1,4 @@
-#1. Доповніть програму-банкомат з попереднього завдання таким функціоналом, як використання банкнот.
+# 1. Доповніть програму-банкомат з попереднього завдання таким функціоналом, як використання банкнот.
 #   Отже, у банкомата повинен бути такий режим як "інкассація", за допомогою якого в нього можна "загрузити" деяку кількість банкнот (вибирається номінал і кількість).
 #   Зняття грошей з банкомату повинно відбуватись в межах наявних банкнот за наступним алгоритмом - видається мінімальна кількість банкнот наявного номіналу. P.S. Будьте обережні з використанням "жадібного" алгоритму (коли вибирається спочатку найбільша банкнота, а потім - наступна за розміром і т.д.) - в деяких випадках він працює неправильно або не працює взагалі. Наприклад, якщо треба видати 160 грн., а в наявності є банкноти номіналом 20, 50, 100, 500,  банкомат не зможе видати суму (бо спробує видати 100 + 50 + (невідомо), а потрібно було 100 + 20 + 20 + 20 ).
 #   Особливості реалізації:
@@ -10,22 +10,34 @@
 #   - якщо гроші вносяться на рахунок - НЕ ТРЕБА їх розбивати і вносити в банкомат - не ускладнюйте собі життя, та й, наскільки я розумію, банкомати все, що в нього входить, відкладає в окрему касету.
 
 import json
-data ={}
+
+data = {}
 data['transactions'] = []
+
 
 def check(sum):
     with open("collection.json") as f:
-            templates = json.load(f)
-            for key in templates:
-                if templates[key] > 0  and sum % int(key) == 0:
-                    return True
-            return False   
+        templates = json.load(f)
+        for key in templates:
+            if templates[key] > 0 and sum % int(key) == 0:
+                return True
+        return False
+
+
+def restore_collection(dic, templates, withdrawal_balance):
+    for key in dic:
+        while dic[key] != 0 and withdrawal_balance % int(key) != 0:
+            dic[key] -= 1
+            with open("collection.json", "wt", encoding="utf-8") as f:
+                templates[key] += 1
+                json.dump(templates, f, indent=2)
+
 
 def start():
     def append_json(user, transaktion, sum):
         with open(f"{user}_transactions.json", 'w') as outfile:
             data['transactions'].append({
-                'user' :f"{user}",
+                'user': f"{user}",
 
                 f'{transaktion}': f"{sum}"
             })
@@ -38,47 +50,40 @@ def start():
             temp = withdrawal_balance
             full_sum = 0
             dic = {
-                    "1000": 0,
-                    "500": 0,
-                    "200": 0,
-                    "100": 0,
-                    "50": 0,
-                    "20": 0,
-                    "10": 0
-                    }
+                "1000": 0,
+                "500": 0,
+                "200": 0,
+                "100": 0,
+                "50": 0,
+                "20": 0,
+                "10": 0
+            }
             for key in templates:
                 if int(templates[key]) > 0 and check(withdrawal_balance - int(key)):
-                    while withdrawal_balance % int(key) != withdrawal_balance  and templates[key] > 0:
-                        print("Зняли: ",  key)
+                    while withdrawal_balance % int(key) != withdrawal_balance and templates[key] > 0:
+                        print("Зняли: ", key)
                         withdrawal_balance -= int(key)
                         full_sum += int(key)
                         dic[key] += 1
 
                         with open("collection.json", "wt", encoding="utf-8") as f:
-                            templates[key]-= 1 
+                            templates[key] -= 1
                             json.dump(templates, f, indent=2)
         with open(f"{login}_balance.json") as f1:
             temp2 = json.load(f1)
-            if(full_sum != temp):
-                for key in dic:
-                    while dic[key] != 0 and  withdrawal_balance % int(key) !=0:
-                        dic[key] -=1
-                        with open("collection.json", "wt", encoding="utf-8") as f:
-                            templates[key]+= 1 
-                            json.dump(templates, f, indent=2)
+            if (full_sum != temp):
+                restore_collection(dic, templates, withdrawal_balance)
                 print("НЕМОЖЛИВО ЗНЯТИ ДАНУ СУМУ ЦІЛКОМ")
 
                 return
             temp2[login] -= full_sum
             print("Було знято: ", temp)
             if temp2[login] <= -501:
-                    return print('максимальна сумма займу не більше 500')
+                return print('максимальна сумма займу не більше 500')
             with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
                 json.dump(temp2, f1, indent=2)
             append_json(login, "withdrawal", full_sum)
 
-                    
-            
     def replenish_the_balance(login):
         with open(f"{login}_balance.json") as f1:
             templates = json.load(f1)
@@ -87,12 +92,12 @@ def start():
                 for val in templates:
                     templates[val] += append_balance
                     with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
-                        append_json(login,'replenish', append_balance) 
+                        append_json(login, 'replenish', append_balance)
                         json.dump(templates, f1, indent=2)
                         print(templates[val])
-            else: print('Введена не коректна сумма')
-    
-    
+            else:
+                print('Введена не коректна сумма')
+
     def see_balance(login):
         with open(f"{login}_balance.json") as f1:
             templates = json.load(f1)
@@ -102,9 +107,9 @@ def start():
             print(balance)
 
     def collection():
-        
+
         def check_banknotes():
-            for k, v in templates.items(): 
+            for k, v in templates.items():
                 print(f'Валюта:{k},Кількість валюти:{v}')
             collection()
 
@@ -117,6 +122,7 @@ def start():
                     with open("collection.json", "wt", encoding="utf-8") as f:
                         json.dump(templates, f, indent=2)
             collection()
+
         with open("collection.json") as f:
             templates = json.load(f)
             print('1. Переглянути наявні купюри\n2. Змінити кількість купюр\n3. Вийти')
@@ -126,12 +132,11 @@ def start():
             elif n == 2:
                 change_number_banknotes()
             elif n == 3:
-                raise SystemExit 
-                
-                
+                raise SystemExit
+
     with open("name.data") as f3:
         pairs = (line.split(",") for line in f3)
-        users = {name:password.strip() for name, password in pairs}
+        users = {name: password.strip() for name, password in pairs}
     user = input("Введіть свій логін: ")
     passw = input("Введіть пароль: ")
 
@@ -152,11 +157,12 @@ def start():
                 elif n == 4:
                     print('Дякую що залишаєтеся з нами)')
                     break
-        
-            
+
+
         else:
             print("Неправильний пароль")
     except KeyError:
         print("неправильне ім'я користувача або пароль")
-        
+
+
 start()
