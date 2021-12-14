@@ -43,24 +43,29 @@ def start():
             json.dump(data, outfile)
 
     def cash_withdrawal(login):
+        dic = {
+            "1000": 0,
+            "500": 0,
+            "200": 0,
+            "100": 0,
+            "50": 0,
+            "20": 0,
+            "10": 0
+        }
         with open("collection.json") as collection:
+
             templates = json.load(collection)
             withdrawal_balance = int(input('Введіть значення зняття:'))
+            with open(f"{login}_balance.json") as f1:
+                loc = json.load(f1)
+                if (int(loc[login]) - int(withdrawal_balance)) <= -500:
+                    print('максимальна сумма займу не більше 500')
+                    return
             temp = withdrawal_balance
             full_sum = 0
-            dic = {
-                "1000": 0,
-                "500": 0,
-                "200": 0,
-                "100": 0,
-                "50": 0,
-                "20": 0,
-                "10": 0
-            }
             for key in templates:
                 if int(templates[key]) > 0 and check(withdrawal_balance - int(key), "collection.json"):
                     while withdrawal_balance % int(key) != withdrawal_balance and templates[key] > 0:
-                        print("Зняли: ", key)
                         withdrawal_balance -= int(key)
                         full_sum += int(key)
                         dic[key] += 1
@@ -70,15 +75,14 @@ def start():
                             json.dump(templates, collection, indent=2)
         with open(f"{login}_balance.json") as f1:
             temp2 = json.load(f1)
-            if (full_sum != temp):
+            if full_sum != temp:
+                print(temp2[login])
                 restore_collection(dic, templates, withdrawal_balance, "collection.json")
                 print("НЕМОЖЛИВО ЗНЯТИ ДАНУ СУМУ ЦІЛКОМ")
 
                 return
             temp2[login] -= full_sum
             print("Було знято: ", temp)
-            if temp2[login] <= -501:
-                return print('максимальна сумма займу не більше 500')
             with open(f"{login}_balance.json", "wt", encoding="utf-8") as f1:
                 json.dump(temp2, f1, indent=2)
             append_json(login, "withdrawal", full_sum)
