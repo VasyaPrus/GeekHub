@@ -11,12 +11,11 @@
 
 import json
 
-data = {}
-data['transactions'] = []
+data = {'transactions': []}
 
 
-def check(sum):
-    with open("collection.json") as f:
+def check(sum, collection_name ):
+    with open(collection_name) as f:
         templates = json.load(f)
         for key in templates:
             if templates[key] > 0 and sum % int(key) == 0:
@@ -24,11 +23,11 @@ def check(sum):
         return False
 
 
-def restore_collection(dic, templates, withdrawal_balance):
+def restore_collection(dic, templates, withdrawal_balance, collection_name):
     for key in dic:
         while dic[key] != 0 and withdrawal_balance % int(key) != 0:
             dic[key] -= 1
-            with open("collection.json", "wt", encoding="utf-8") as f:
+            with open(collection_name, "wt", encoding="utf-8") as f:
                 templates[key] += 1
                 json.dump(templates, f, indent=2)
 
@@ -44,8 +43,8 @@ def start():
             json.dump(data, outfile)
 
     def cash_withdrawal(login):
-        with open("collection.json") as f:
-            templates = json.load(f)
+        with open("collection.json") as collection:
+            templates = json.load(collection)
             withdrawal_balance = int(input('Введіть значення зняття:'))
             temp = withdrawal_balance
             full_sum = 0
@@ -59,20 +58,20 @@ def start():
                 "10": 0
             }
             for key in templates:
-                if int(templates[key]) > 0 and check(withdrawal_balance - int(key)):
+                if int(templates[key]) > 0 and check(withdrawal_balance - int(key), "collection.json"):
                     while withdrawal_balance % int(key) != withdrawal_balance and templates[key] > 0:
                         print("Зняли: ", key)
                         withdrawal_balance -= int(key)
                         full_sum += int(key)
                         dic[key] += 1
 
-                        with open("collection.json", "wt", encoding="utf-8") as f:
+                        with open("collection.json", "wt", encoding="utf-8") as collection:
                             templates[key] -= 1
-                            json.dump(templates, f, indent=2)
+                            json.dump(templates, collection, indent=2)
         with open(f"{login}_balance.json") as f1:
             temp2 = json.load(f1)
             if (full_sum != temp):
-                restore_collection(dic, templates, withdrawal_balance)
+                restore_collection(dic, templates, withdrawal_balance, "collection.json")
                 print("НЕМОЖЛИВО ЗНЯТИ ДАНУ СУМУ ЦІЛКОМ")
 
                 return
